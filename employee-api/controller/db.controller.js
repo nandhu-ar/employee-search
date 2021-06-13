@@ -108,10 +108,10 @@ const validateLogin = async (req, res) => {
         await connection();
         const isValidUser = await userModel.findOne(user);
         if(isValidUser){
-            res.status(200).json(true);
+            return true;
         }
         else{
-            res.status(404).json(false);
+            return false;
         }
     } catch (error) {
         res.status(404).json({ "error": "unable to validate user login" });

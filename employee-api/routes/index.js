@@ -3,10 +3,11 @@ var router = express.Router();
 var employee = require('../controller/employee.controller');
 var user = require('../controller/user.controller')
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.post('/user', user.validateLogin);
+
+router.put('/user', user.addUser);
+
+router.use(user.authenticateToken);
 
 router.put('/employee', employee.addEmployee);
 
@@ -18,8 +19,5 @@ router.delete('/employee/:EmployeeId', employee.deleteEmployee);
 
 router.post('/employee' , employee.getFilteredEmployees);
 
-router.put('/user', user.addUser);
-
-router.post('/user', user.validateLogin);
 
 module.exports = router;

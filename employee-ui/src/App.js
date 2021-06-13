@@ -12,8 +12,8 @@ function App() {
   return (
     <Provider store={store}>
     <div className="container-fluid">
-      <NavigationBar></NavigationBar>
       <Router>
+      <Route path = "*" component={NavigationBar}></Route>
       <Route exact path = "/" component = {UnAuthenticatedLanding}></Route>
       <Route exact path = "/employees" component = {Employees}></Route>
       <Route exact path = "/employeeDetails" component = {EmployeeDetails}></Route>

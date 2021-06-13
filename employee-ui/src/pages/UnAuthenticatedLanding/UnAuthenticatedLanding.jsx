@@ -9,7 +9,8 @@ const UnAuthenticatedLanding = (props) => {
     const {
         validateLogin,
         isLoginSuccess,
-        isLoading
+        isLoading,
+        jwtToken
     } = props;
 
     const [isValidForm, setValidForm] = useState(false);
@@ -20,6 +21,7 @@ const UnAuthenticatedLanding = (props) => {
     const handleLogin = (e) => {
         e.preventDefault();
         e.stopPropagation();
+        window.sessionStorage.removeItem("isLogout");
         validateLogin({
             Name: name,
             Password: password
@@ -33,14 +35,17 @@ const UnAuthenticatedLanding = (props) => {
     }, [name, password])
 
     useEffect(() => {
-        console.log("is loading", isLoading, isLoginSuccess)
-        if(isLoginSuccess){
-            props.history.push('/employees')
+        const isLogout = window.sessionStorage.getItem("isLogout");
+        if(!isLogout && isLoginSuccess){
+            window.sessionStorage.setItem("isLoggedIn", isLoginSuccess);
+            window.sessionStorage.setItem("jwtToken", jwtToken);
+            props.history.push('/employees');
         }
         else if(!isLoading && !isLoginSuccess && isValidForm){
             seterrMessage('Login Failed')
         }
     }, [isLoginSuccess])
+
 
     return (
         <React.Fragment>
@@ -72,7 +77,8 @@ const UnAuthenticatedLanding = (props) => {
 
 const mapStateToProps = (state) => ({
     isLoginSuccess: state.isLoginSuccess,
-    isLoading: state.isLoading
+    isLoading: state.isLoading,
+    jwtToken: state.jwtToken
 })
 
 const mapDispatchToProps =  {

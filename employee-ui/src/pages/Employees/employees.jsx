@@ -67,10 +67,22 @@ const Employees = (props) => {
         }
     }, showFilter)
 
+    const LogOut = () => {
+        window.sessionStorage.removeItem("isLoggedIn");
+        window.sessionStorage.removeItem("jwtToken");
+        window.sessionStorage.setItem("isLogout", true);
+        props.history.push("/");
+    }
     useEffect(() => {
-        setIsDetailsScreen(false);
-        getAllEmployeesDetails();
+        if(window.sessionStorage.getItem("isLoggedIn") && window.sessionStorage.getItem("jwtToken") ){
+            setIsDetailsScreen(false);
+            getAllEmployeesDetails();
+        }
+        else{
+            LogOut();
+        }
     }, [])
+
     return (
         <React.Fragment>
             <div className="container-fluid">
@@ -88,6 +100,7 @@ const Employees = (props) => {
                                 <button className="mt-3 btn btn-secondary mb-3" onClick={() => setIsDetailsScreen(true)}>Add new User</button>
                                 <button className="m-3 btn btn-secondary mb-3" onClick={() => setShowFilter(!showFilter)}> {showFilter ? "Hide Filter" : "Show Filter"}</button>
                                 {showFilter ? <button className="mt-3 btn btn-secondary mb-3" onClick={() => startSearch()}>Search</button> : null}
+                                <button className="m-3 btn btn-secondary mb-3" onClick={() => LogOut()}>LogOut</button>
                                 <table className="table table-striped table-hover">
                                     <thead>
                                         <tr>

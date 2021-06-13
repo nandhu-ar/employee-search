@@ -5,8 +5,6 @@ import { VALIDATE_LOGIN, LoginComplete, SET_LOADING } from "./actions";
 
 function* callValidateLogin(action) {
   try {
-    
-    console.log("validateLogin", action);
     yield put({type: SET_LOADING})
     const {data} = yield call(validateLogin, action.user);
     yield put(LoginComplete(data));
