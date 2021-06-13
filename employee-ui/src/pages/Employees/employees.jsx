@@ -65,7 +65,7 @@ const Employees = (props) => {
         if(!showFilter){
             getAllEmployeesDetails()
         }
-    }, showFilter)
+    }, [showFilter])
 
     const LogOut = () => {
         window.sessionStorage.removeItem("isLoggedIn");
@@ -97,10 +97,11 @@ const Employees = (props) => {
                             </div>
                             :
                             <React.Fragment>
-                                <button className="mt-3 btn btn-secondary mb-3" onClick={() => setIsDetailsScreen(true)}>Add new User</button>
+                                <button className="mt-3 btn btn-secondary mb-3" onClick={() => setIsDetailsScreen(true)}>Add new Employee</button>
                                 <button className="m-3 btn btn-secondary mb-3" onClick={() => setShowFilter(!showFilter)}> {showFilter ? "Hide Filter" : "Show Filter"}</button>
-                                {showFilter ? <button className="mt-3 btn btn-secondary mb-3" onClick={() => startSearch()}>Search</button> : null}
+                                {showFilter ? <button className="mt-3 btn btn-info mb-3" onClick={() => startSearch()} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Search works with exact match."> Search</button> : null}
                                 <button className="m-3 btn btn-secondary mb-3" onClick={() => LogOut()}>LogOut</button>
+                                {showFilter ? <p className="text text-info">*Search uses exact match.</p> : null}
                                 <table className="table table-striped table-hover">
                                     <thead>
                                         <tr>
@@ -127,7 +128,7 @@ const Employees = (props) => {
                                         {
                                             !employees.length ?
                                                 <tr>
-                                                    <td>No Employee Details to display</td>
+                                                    <td colSpan="6">No Employee Details to display</td>
                                                 </tr>
                                                 :
                                                 employees.map(employee => {

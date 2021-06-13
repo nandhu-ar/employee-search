@@ -22,10 +22,16 @@ const UnAuthenticatedLanding = (props) => {
         e.preventDefault();
         e.stopPropagation();
         window.sessionStorage.removeItem("isLogout");
-        validateLogin({
-            Name: name,
-            Password: password
-        });
+        if(!name || !password){
+            seterrMessage("All Fields are mandatory");
+        }
+        else{
+            validateLogin({
+                Name: name,
+                Password: password
+            });
+        }
+        
     }
 
     useEffect(() => {
@@ -54,15 +60,15 @@ const UnAuthenticatedLanding = (props) => {
             <p className="fs-2 mb-3"> Login</p>
             <div className="mb-3">
                 <label className="form-label">Name</label>
-                <input type="text" className="form-control" id="Name" value={name} onChange={e => setName(e.target.value)} />
+                <input type="text" className="form-control" id="Name" value={name} onChange={e => setName(e.target.value)} required/>
             </div>
             <div className="mb-3">
                 <label className="form-label">Password</label>
-                <input type="password" className="form-control" id="Password" value={password} onChange={e => setPassword(e.target.value)} />
+                <input type="password" className="form-control" id="Password" value={password} onChange={e => setPassword(e.target.value)} required/>
             </div>
             
-            {isLoading ? <button class="btn btn-secondary" type="button" disabled>
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            {isLoading ? <button className="btn btn-secondary" type="button" disabled>
+            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             Loading...
             </button> :
             <button type="submit" className="btn btn-secondary mb-3" onClick={handleLogin} disabled={!isValidForm}>Login</button>

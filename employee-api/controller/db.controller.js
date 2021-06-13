@@ -46,11 +46,11 @@ const deleteEmployee = async (req, res) => {
         await connection();
         const response = await employeeModel.findOneAndDelete({EmployeeId: employeeId});
         mongoose.disconnect();
-        if(res){
+        if(response){
             res.status(200).json({ "message": "Employee Details deleted successfully" });
         }
         else{
-            res.status(200).json({ "message": "Unable to find employee details or may have been already delted" });
+            res.status(200).json({ "message": "Unable to find employee details or may have been already deleted" });
         }
     } catch (error) {
         res.status(404).json({ "error": "unable to delete employee details" });

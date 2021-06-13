@@ -15,14 +15,30 @@ const SignUp = (props) => {
         setErrorMessage(data.message);
     }
 
+    const validateEmail = (email) => {
+        const regex = /\S+@\S+\.\S+/
+        return regex.test(email);
+    }
+
     const handleSignUp = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        callSignUpApi({
-            Name: name,
-            Password: password,
-            EmailId: email
-        })       
+        if(!name || !password || !email){
+            setErrorMessage("All field are mandatory")
+        }
+        else if(!validateEmail(email)){
+            setErrorMessage("Invalid email");
+        }
+        else if(password.length < 8){
+            setErrorMessage("Password must contain atleast 8 characters");
+        }
+        else{
+            callSignUpApi({
+                Name: name,
+                Password: password,
+                EmailId: email
+            })       
+        }
     }
 
     useEffect(() => {
@@ -36,18 +52,18 @@ const SignUp = (props) => {
              <p className="fs-2 mb-3"> Sign Up as a User</p>
             <div className="mb-3">
                 <label className="form-label">Name</label>
-                <input type="text" className="form-control" id="Name" value={name} onChange={e => setName(e.target.value)} />
+                <input type="text" className="form-control" id="Name" value={name} onChange={e => setName(e.target.value)} required/>
             </div>
             <div className="mb-3">
                 <label className="form-label">Password</label>
-                <input type="password" className="form-control" id="Password" value={password} onChange={e => setPassword(e.target.value)}/>
+                <input type="password" className="form-control" id="Password" value={password} onChange={e => setPassword(e.target.value)} required/>
             </div>
             <div className="mb-3">
                 <label className="form-label">Email</label>
-                <input type="email" className="form-control" id="EmailId" value={email} onChange={e => setEmail(e.target.value)} />
+                <input type="email" className="form-control" id="EmailId" value={email} onChange={e => setEmail(e.target.value)} required/>
             </div>
             <button type="submit" className="btn btn-secondary mb-3" onClick={handleSignUp} disabled={!isValidForm}>Sign Up</button>
-            {errMessage ? <div class={`alert alert-${errMessage.includes("You have successfully registered") ? 'success' : 'danger'}` } role="alert">{errMessage}</div> : null}
+            {errMessage ? <div className={`alert alert-${errMessage.includes("You have successfully registered") ? 'success' : 'danger'}` } role="alert">{errMessage}</div> : null}
         </form>
     )
 }

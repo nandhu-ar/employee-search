@@ -6,19 +6,37 @@ const EmployeeDetails = (props) => {
     const { isEdit, employee, setIsDetailsScreen } = props;
     const [name, setName] = useState(employee?.Name || '');
     const [email, setEmail] = useState(employee?.EmailId || '')
-    const [age, setAge] = useState(employee?.Age || null);
+    const [age, setAge] = useState(employee?.Age || '');
     const [address, setAddress] = useState(employee?.Address || '');
-    const [phone, setPhone] = useState(employee?.MobileNumber || null);
+    const [phone, setPhone] = useState(employee?.MobileNumber || '');
     const [isValidForm, setValidForm] = useState(false);
     const [errMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [deleteComplete, setIsDeleteComplete] = useState(false);
+
+    const validateEmail = (email) => {
+        const regex = /\S+@\S+\.\S+/
+        return regex.test(email);
+    }
 
     const callRegisterApi = async (employeeDetails) => {
-        setIsLoading(true)
-        const { data } = isEdit ? await updateEmployee(employeeDetails) : await registerEmployee(employeeDetails);
-        setErrorMessage(data.message);
-        setIsLoading(false);
+        if(!name || !email || !age || !address || !phone){
+            setErrorMessage("All fields are mandatory")
+        }
+        else if (!validateEmail(email)){
+            setErrorMessage("Invalid Email");
+        }
+        else if (age < 1 || age > 150){
+            setErrorMessage("Enter an age under 150 years or greater than zero");
+        }
+        else if (phone.toString().length !== 10){
+            setErrorMessage("Enter phone number with 10 digits");
+        }
+        else{
+            setIsLoading(true)
+            const { data } = isEdit ? await updateEmployee(employeeDetails) : await registerEmployee(employeeDetails);
+            setErrorMessage(data.message);
+            setIsLoading(false);
+        }
     }
 
     const callDeleteApi = async () => {
@@ -26,7 +44,7 @@ const EmployeeDetails = (props) => {
             setIsLoading(true);
             const { data } = await deleteEmployee(employee.EmployeeId);
             setIsLoading(false);
-            setErrorMessage("Deleted Successfully");
+            setErrorMessage(data.message);
         }
         catch(error){
             setErrorMessage(`Unable to delete`);
@@ -64,15 +82,11 @@ const EmployeeDetails = (props) => {
         }
     }, [name, email, age, address, phone])
 
-    useEffect(() => {
-        console.log("values", employee)
-    }, [])
-
     return (
         <div className="container mt-5">
-            {isLoading ? <div class="d-flex justify-content-center">
-                <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
+            {isLoading ? <div className="d-flex justify-content-center">
+                <div className="spinner-border" role="status">
+                    <span className="visually-hidden">Loading...</span>
                 </div>
             </div> :
                 <form className="col-md-9 col-sm-12" noValidate>
@@ -84,6 +98,7 @@ const EmployeeDetails = (props) => {
                     <div className="mb-3">
                         <label className="form-label">Email</label>
                         <input type="email" className="form-control" id="EmailId" value={email} onChange={e => setEmail(e.target.value)} />
+                        <label className="form-label text-info">*Email id should be unique</label>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Age</label>

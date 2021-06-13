@@ -4,7 +4,7 @@ import {Provider} from 'react-redux';
 import store from './store';
 import NavigationBar from './pages/navBar/navigationBar';
 import UnAuthenticatedLanding from './pages/UnAuthenticatedLanding/UnAuthenticatedLanding.jsx';
-import { BrowserRouter as Router, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
 import Employees from './pages/Employees/employees';
 import EmployeeDetails from './pages/Employees/employeeDetails';
 
@@ -13,10 +13,9 @@ function App() {
     <Provider store={store}>
     <div className="container-fluid">
       <Router>
-      <Route path = "*" component={NavigationBar}></Route>
+      <NavigationBar></NavigationBar>
       <Route exact path = "/" component = {UnAuthenticatedLanding}></Route>
       <Route exact path = "/employees" component = {Employees}></Route>
-      <Route exact path = "/employeeDetails" component = {EmployeeDetails}></Route>
       </Router>
     </div>
     </Provider>

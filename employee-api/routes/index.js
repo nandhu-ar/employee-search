@@ -19,5 +19,9 @@ router.delete('/employee/:EmployeeId', employee.deleteEmployee);
 
 router.post('/employee' , employee.getFilteredEmployees);
 
+router.all('*', (req, res) => {
+  res.status(404).json({"message" : "Invalid Url"})
+})
+
 
 module.exports = router;
